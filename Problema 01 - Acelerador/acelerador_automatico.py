@@ -52,27 +52,29 @@ dist.view()
 plt.show()
 '''
 
-
+# INPUTS
 velocidade = float(input("Velocidade (0 a 120 km/h): "))
 while velocidade < 0 or velocidade > 120:
-    try:
-        velocidade = float(input("Velocidade (0 a 120 km/h): "))
-    except ValueError:
-        print('Valor inválido')
+	try:
+		velocidade = float(input("Velocidade (0 a 120 km/h): "))
+	except ValueError:
+		print('Valor inválido')
 
 distancia = float(input("Distância do carro da frente (0 a 20 metros): "))
 while distancia < 0 or distancia > 20:
-    try:
-        distancia = float(input("Distância do carro da frente (0 a 20 metros): "))
-    except ValueError:
-        print('Valor inválido')
+	try:
+		distancia = float(input("Distância do carro da frente (0 a 20 metros): "))
+	except ValueError:
+		print('Valor inválido')
 
+# ADICIONANDO AO CONTROLADOR
 cmd_output.input['velocidade'] = velocidade
 cmd_output.input['distancia_carro_frente'] = distancia
 
+# COMPUTANDO
 cmd_output.compute()
 
+# APRESENTANDO RESULTADO
 cmd.view(sim=cmd_output)
 plt.show()
-
 print(cmd_output.output['comando'])

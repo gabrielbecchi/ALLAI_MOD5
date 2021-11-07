@@ -1,0 +1,28 @@
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+import matplotlib.pyplot as plt
+
+# ENTRADAS 
+
+# CONSEQUENCIAS
+
+# FUNCOES DE TEMPERATURA
+
+# FUNCOES DE UMIDADE
+
+# FUNCOES DE COMANDOS
+
+# REGRAS
+
+# CRIANDO O SISTEMA E SIMULANDO
+
+# IMPRIMINDO
+
+# INPUTS
+
+# ADICIONANDO AO CONTROLADOR
+
+# COMPUTANDO
+
+# APRESENTANDO RESULTADO
