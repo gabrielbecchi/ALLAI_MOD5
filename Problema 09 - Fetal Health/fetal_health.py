@@ -23,20 +23,14 @@ from sklearn.multiclass import OutputCodeClassifier
 from single_model import test_single_model
 
 # LOADING DATA
-data = p.read_csv('mushrooms.csv')
+data = p.read_csv('fetal_health.csv')
 
 # PRE-PROCESSING
-target = data['class']
-del data['class']
+target = data['fetal_health']
+del data['fetal_health']
 encoder = preprocessing.LabelEncoder()
 encoder.fit(target.unique())
 target = encoder.transform(target)
-
-for column_name in data.columns:
-	if(data[column_name].dtype == object):
-		aux = p.get_dummies(data[column_name], prefix=column_name)
-		del data[column_name]
-		data = p.concat([data,aux], axis=1)
 
 scaler = preprocessing.MinMaxScaler().fit(data)
 data = scaler.transform(data)

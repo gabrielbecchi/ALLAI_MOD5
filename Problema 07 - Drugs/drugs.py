@@ -36,7 +36,7 @@ scaler = preprocessing.MinMaxScaler().fit(data)
 data = scaler.transform(data)
 
 # CLASSIFICATIONS 
-scoring = ['accuracy', 'f1_micro','precision_micro','recall_micro']
+scoring = ['accuracy', 'f1_weighted','precision_weighted','recall_weighted']
 scores = {}
 
 # LOGISTIC REGRESSION
@@ -83,8 +83,8 @@ for method, score in scores.items():
 	train = np.mean(score['fit_time'])
 	test = np.mean(score['score_time'])
 	accuracy = np.mean(score['test_accuracy'])
-	precision = np.mean(score['test_precision_micro'])
-	recall = np.mean(score['test_recall_micro'])
-	f1 = np.mean(score['test_f1_micro'])
+	precision = np.mean(score['test_precision_weighted'])
+	recall = np.mean(score['test_recall_weighted'])
+	f1 = np.mean(score['test_f1_weighted'])
 	print(method+' '*(10-len(method))+"""TRAIN: {:.5f}s, TESTE: {:.5f}s, ACCURACY: {:.5f}, PRECISION: {:.5f}, RECALL: {:.5f}, F1: {:.5f}""".format(train, test, accuracy, precision, recall, f1))
 
