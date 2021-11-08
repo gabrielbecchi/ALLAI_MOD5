@@ -17,11 +17,23 @@ from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import OutputCodeClassifier
 
 # LOADING DATA
-data = load_digits()
+data = p.read_csv('drug200.csv')
 
 # PRE-PROCESSING
-scaler = preprocessing.MinMaxScaler().fit(data.data)
-data.data = scaler.transform(data.data)
+target = data['Drug']
+del data['Drug']
+encoder = preprocessing.LabelEncoder()
+encoder.fit(target.unique())
+target = encoder.transform(target)
+
+for column_name in data.columns:
+	if(data[column_name].dtype == object):
+		aux = p.get_dummies(data[column_name], prefix=column_name)
+		del data[column_name]
+		data = p.concat([data,aux], axis=1)
+
+scaler = preprocessing.MinMaxScaler().fit(data)
+data = scaler.transform(data)
 
 # CLASSIFICATIONS 
 scoring = ['accuracy', 'f1_micro','precision_micro','recall_micro']
@@ -29,43 +41,43 @@ scores = {}
 
 # LOGISTIC REGRESSION
 engine = OneVsRestClassifier(LogisticRegression())
-scores['LR_OvR'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['LR_OvR'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OneVsOneClassifier(LogisticRegression())
-scores['LR_OvO'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['LR_OvO'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OutputCodeClassifier(LogisticRegression())
-scores['LR_OC'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['LR_OC'] = cross_validate(engine, data, target, scoring=scoring)
 
 # NAIVE BAYES
 engine = OneVsRestClassifier(GaussianNB())
-scores['NB_OvR'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['NB_OvR'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OneVsOneClassifier(GaussianNB())
-scores['NB_OvO'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['NB_OvO'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OutputCodeClassifier(GaussianNB())
-scores['NB_OC'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['NB_OC'] = cross_validate(engine, data, target, scoring=scoring)
 
 # KNN
 engine = OneVsRestClassifier(KNeighborsClassifier())
-scores['KNN_OvR'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['KNN_OvR'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OneVsOneClassifier(KNeighborsClassifier())
-scores['KNN_OvO'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['KNN_OvO'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OutputCodeClassifier(KNeighborsClassifier())
-scores['KNN_OC'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['KNN_OC'] = cross_validate(engine, data, target, scoring=scoring)
 
 # DECISION TREE
 engine = OneVsRestClassifier(DecisionTreeClassifier())
-scores['DT_OvR'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['DT_OvR'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OneVsOneClassifier(DecisionTreeClassifier())
-scores['DT_OvO'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['DT_OvO'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OutputCodeClassifier(DecisionTreeClassifier())
-scores['DT_OC'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['DT_OC'] = cross_validate(engine, data, target, scoring=scoring)
 
 # SVD
 engine = OneVsRestClassifier(SVC())
-scores['SVD_OvR'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['SVD_OvR'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OneVsOneClassifier(SVC())
-scores['SVD_OvO'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['SVD_OvO'] = cross_validate(engine, data, target, scoring=scoring)
 engine = OutputCodeClassifier(SVC())
-scores['SVD_OC'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['SVD_OC'] = cross_validate(engine, data, target, scoring=scoring)
 
 for method, score in scores.items():
 	train = np.mean(score['fit_time'])

@@ -48,7 +48,6 @@ encoder = preprocessing.LabelEncoder()
 encoder.fit(data['Survived'].unique())
 label = encoder.transform(data['Survived'])
 del data['Survived']
-print(len(label))
 
 # ESCALARES
 scaler = preprocessing.MinMaxScaler().fit(data)

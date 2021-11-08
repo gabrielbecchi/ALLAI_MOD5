@@ -4,7 +4,6 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn import preprocessing
 from sklearn.model_selection import cross_validate
-from sklearn.metrics import confusion_matrix
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
