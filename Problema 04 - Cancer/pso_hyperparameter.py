@@ -39,12 +39,12 @@ def funcao_objetivo(x):
 	return -1*result
 
 xopt, fopt = pso(funcao_objetivo, lower_bound, upper_bound, 
-	swarmsize=10, maxiter=100,minstep=1e-4)
+	swarmsize=30, maxiter=100,minstep=1e-4)
 
 print("Neighbors: %s" % int(xopt[0]))
 print("Weights: %s" % weights[int(xopt[1])])
 print("Distancia: %s" % distance[int(xopt[2])])
-print("F1 = %0.2f" % (fopt*-1))
+print("F1 = %0.4f" % (fopt*-1))
 
 print(xopt)
 print(fopt)

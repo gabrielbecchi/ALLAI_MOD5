@@ -26,6 +26,8 @@ data = p.read_csv('train.csv',usecols=colunas)
 
 # PRE-PROCESSING
 
+
+
 # TRATANDO NaN
 #data = data.dropna(axis=0, how='any')
 data = data.fillna(data.mean())

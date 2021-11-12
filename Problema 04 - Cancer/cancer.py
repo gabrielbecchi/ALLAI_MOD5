@@ -15,8 +15,10 @@ from sklearn.svm import SVC
 data = load_breast_cancer()
 
 # PRE-PROCESSING
+#input(p.DataFrame(data.data).describe())
 scaler = preprocessing.MinMaxScaler().fit(data.data)
 data.data = scaler.transform(data.data)
+#input(p.DataFrame(data.data).describe())
 
 # CLASSIFICATIONS 
 scoring = ['accuracy', 'f1','precision','recall']
@@ -38,9 +40,9 @@ scores['KNN'] = cross_validate(engine, data.data, data.target, scoring=scoring)
 engine = DecisionTreeClassifier()
 scores['DT'] = cross_validate(engine, data.data, data.target, scoring=scoring)
 
-# SVD
+# SVM
 engine = SVC()
-scores['SVD'] = cross_validate(engine, data.data, data.target, scoring=scoring)
+scores['SVM'] = cross_validate(engine, data.data, data.target, scoring=scoring)
 
 for method, score in scores.items():
 	train = np.mean(score['fit_time'])
@@ -49,8 +51,6 @@ for method, score in scores.items():
 	precision = np.mean(score['test_precision'])
 	recall = np.mean(score['test_recall'])
 	f1 = np.mean(score['test_f1'])
-	print(method+' '*(7-len(method))+"""TRAIN: {:.5f}s, TESTE: {:.5f}s, 
-		ACCURACY: {:.5f}, PRECISION: {:.5f}, RECALL: {:.5f}, F1: {:.5f}
-		""".format(train, test, accuracy, precision, recall, f1))
+	print(method+' '*(7-len(method))+"""TRAIN: {:.5f}s, TESTE: {:.5f}s, ACCURACY: {:.5f}, PRECISION: {:.5f}, RECALL: {:.5f}, F1: {:.5f}""".format(train, test, accuracy, precision, recall, f1))
 
 

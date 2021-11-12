@@ -78,3 +78,4 @@ cmd_output.compute()
 cmd.view(sim=cmd_output)
 plt.show()
 print(cmd_output.output['comando'])
+#'''
