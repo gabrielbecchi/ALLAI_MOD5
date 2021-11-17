@@ -1,7 +1,6 @@
 import pandas as p
 import numpy as np
 
-from sklearn.datasets import load_digits
 from sklearn import preprocessing
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import confusion_matrix
@@ -22,18 +21,22 @@ data = p.read_csv('drug200.csv')
 # PRE-PROCESSING
 target = data['Drug']
 del data['Drug']
+
 encoder = preprocessing.LabelEncoder()
 encoder.fit(target.unique())
 target = encoder.transform(target)
 
 for column_name in data.columns:
 	if(data[column_name].dtype == object):
+		print(data[column_name])
 		aux = p.get_dummies(data[column_name], prefix=column_name)
 		del data[column_name]
+		input(aux)
 		data = p.concat([data,aux], axis=1)
 
 scaler = preprocessing.MinMaxScaler().fit(data)
 data = scaler.transform(data)
+
 
 # CLASSIFICATIONS 
 scoring = ['accuracy', 'f1_weighted','precision_weighted','recall_weighted']

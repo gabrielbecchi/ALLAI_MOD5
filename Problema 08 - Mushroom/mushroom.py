@@ -101,9 +101,9 @@ engine_lr = LogisticRegression()
 ensemble = AdaBoostClassifier(engine_lr)
 scores['ADABOOST_LR'] = cross_validate(ensemble, data, target, scoring=scoring)
 
-engine_nb = LogisticRegression()
-ensemble = AdaBoostClassifier(engine_nb)
-scores['ADABOOST_NB'] = cross_validate(ensemble, data, target, scoring=scoring)
+#engine_nb = LogisticRegression()
+#ensemble = AdaBoostClassifier(engine_nb)
+#scores['ADABOOST_NB'] = cross_validate(ensemble, data, target, scoring=scoring)
 
 engine_dt = DecisionTreeClassifier()
 ensemble = AdaBoostClassifier(engine_dt)
