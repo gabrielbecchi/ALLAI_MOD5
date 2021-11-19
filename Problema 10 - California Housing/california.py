@@ -1,5 +1,7 @@
 import pandas as p
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from sklearn import preprocessing
 from sklearn.model_selection import cross_validate
@@ -20,8 +22,9 @@ from sklearn.ensemble import RandomForestRegressor
 data = p.read_csv('housing.csv')
 
 # TRATANDO NaN
-#data = data.dropna(axis=0, how='any')
-data = data.fillna(data.mean())
+data = data.dropna(axis=0, how='any')
+#data = data.fillna(data.mean())
+
 
 # PRE-PROCESSING
 target = data['median_house_value']
@@ -31,28 +34,59 @@ aux = p.get_dummies(data['ocean_proximity'], prefix='ocean_proximity')
 del data['ocean_proximity']
 data = p.concat([data,aux], axis=1)
 
-del data['longitude']
-del data['latitude']
+#del data['longitude']
+#del data['latitude']
 
-scaler = preprocessing.MinMaxScaler().fit(data)
-data = scaler.transform(data)
+# CALCULO DE DISTÂNCIA
+data['dist_LA'] = ((data['longitude']-(-118.14))**2+(data['latitude']-(-34.3))**2)**0.5
+data['dist_SF'] = ((data['longitude']-(-122.24))**2+(data['latitude']-(-37.46))**2)**0.5
+data['dist_SD'] = ((data['longitude']-(-117.09))**2+(data['latitude']-(-32.42))**2)**0.5
+
+# LOG SQUARED
+'''
+sns.set_theme()
+sns.distplot(data['median_income'])
+plt.show()
+data['median_income'] = np.log(data['median_income']+1)
+sns.set_theme()
+sns.distplot(data['median_income'])
+plt.show()
+'''
+
+# BINNING
+n_bins = 3
+bins = np.linspace(np.min(data['median_income']),np.max(data['median_income']),n_bins)
+labels = list(range(n_bins-1))
+data['classes'] = p.cut(data['median_income'], bins=bins, labels=labels, include_lowest=True)
+
+aux = p.get_dummies(data['classes'], prefix='classes')
+del data['classes']
+data = p.concat([data,aux], axis=1)
+
+
+#scaler = preprocessing.MinMaxScaler().fit(data)
+#data = scaler.transform(data)
 
 scores = {}
 scoring = ['neg_root_mean_squared_error', 'neg_mean_absolute_error',
 		'neg_mean_squared_error','r2','explained_variance']
 
+'''
 engine = LinearRegression(normalize=True)
 scores['LINEAR_REG'] = cross_validate(engine, data, target, scoring=scoring)
+
 
 engine = Lasso(max_iter=500)
 scores['LASSO'] = cross_validate(engine, data, target, scoring=scoring)
 
 engine = Ridge()
 scores['RIDGE'] = cross_validate(engine, data, target, scoring=scoring)
+'''
 
-engine = ElasticNet()
+engine = ElasticNet(alpha=2.30, l1_ratio=0.9545)
 scores['ELASTICNET'] = cross_validate(engine, data, target, scoring=scoring)
 
+'''
 engine = KNeighborsRegressor()
 scores['KNN'] = cross_validate(engine, data, target, scoring=scoring)
 
@@ -74,6 +108,7 @@ scores['BOOSTING'] = cross_validate(engine, data, target, scoring=scoring)
 
 engine = RandomForestRegressor()
 scores['RANDOM_FOREST'] = cross_validate(engine, data, target, scoring=scoring)
+'''
 
 for method, score in scores.items():
 	train = np.mean(score['fit_time'])
