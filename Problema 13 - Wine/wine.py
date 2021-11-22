@@ -62,7 +62,6 @@ for n_clusters in range(2,10):
 	#visualizer.show()
 
 # DBSCAN
-
 clusterer = DBSCAN(eps=5,min_samples=2)
 preds = clusterer.fit_predict(data)
 n_clusters = len(np.unique(preds))
@@ -71,5 +70,4 @@ print("DBSCAN........: n_clusters = {}, silhouette score = {:.4f}".format(n_clus
 #visualizer = SilhouetteVisualizer(clusterer, colors='yellowbrick')
 #visualizer.fit(data)
 #visualizer.show()
-
 
