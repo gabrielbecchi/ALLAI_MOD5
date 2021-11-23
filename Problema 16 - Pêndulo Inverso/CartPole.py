@@ -21,14 +21,16 @@ class CartPole:
 		center_values = [0,0,0,0]
 		size_windows = [20,20,0.2,0.2]
 		numb_windows = [4,4,36,36]
+		#numb_windows = [2,2,2,2]
 		list_observations = self.cTd.prepare(center_values,size_windows,numb_windows)
 
 		# action_space,observation_space
 		self.core = qlearning_core([0,1],list_observations)
 		# start_exploration_rate,final_exploration_rate,exploration_dec_rate
-		self.core.set_exploration_parameters(1,0.01,0.00001)
+		self.core.set_exploration_parameters(1,0.01,0.00002)
 		# learning_rate,discount_rate
-		self.core.set_traing_rates(0.3,0.99)
+		#self.core.set_traing_rates(0.3,0.99)
+		self.core.set_traing_rates(0.1,0.99)
 
 	def run(self,episodes):
 		#plt.axis([0,1000, 0, 350])
@@ -48,8 +50,8 @@ class CartPole:
 				new_observation, reward, done, info = self.env.step(action)
 				#input(new_observation)
 				new_observation = self.cTd.define_category(new_observation)
-				#total_reward += reward
-				total_reward = reward
+				total_reward += reward
+				#total_reward = reward
 				if(done and max_iterations<199):
 					total_reward = 0
 				#Update Q-Table
@@ -60,6 +62,7 @@ class CartPole:
 				max_iterations += 1
 				if(ep%100 == 0):
 					self.env.render()
+			#input(self.core.qTable)
 
 
 			self.number_interactions.append(max_iterations)
@@ -80,9 +83,9 @@ class CartPole:
 			if(continuous_200 == 200):
 				print("***")
 				print("Episodes until sucess: "+str(ep+1))
-				sys.exit()
+				return
+				#sys.exit()
 		
-
 
 	def finish(self):
 		self.env.close()
