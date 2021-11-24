@@ -35,22 +35,30 @@ target  = scaler.transform(target)
 # SPLIT
 X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.50)
 
-# DESCREVENDO O MODELO
-model = Sequential()
-model.add(Dense(10, activation='relu', input_dim=13))
-#model.add(Dropout(.1))
-#model.add(Dense(10, activation='relu'))
-model.add(Dense(10, activation='relu'))
-model.add(Dense(1, activation='relu'))
 
-# Compile the model
-model.compile(optimizer='sgd', loss='mse', metrics=['mse'])
-model.fit(X_train, y_train, epochs=100)
+for i in  range(2,10):
+	# DESCREVENDO O MODELO
+	model = Sequential()
 
-pred_train= model.predict(X_train)
-scores = model.evaluate(X_train, y_train, verbose=0)
-print('MSE on training data: {}'.format(scores[1]))   
- 
-pred_test= model.predict(X_test)
-scores2 = model.evaluate(X_test, y_test, verbose=0)
-print('MSE on test data: {}'.format(scores2[1]))  
+	model.add(Dense(10, activation='relu', input_dim=13))
+	for j in range(i-1):
+		model.add(Dense(10, activation='relu'))
+		
+		#model.add(Dropout(.1))
+	#
+	#model.add(Dense(10, activation='relu'))
+	#model.add(Dense(1, activation='relu'))
+
+	# Compile the model
+	model.compile(optimizer='adam', loss='mse', metrics=['mse'])
+	model.fit(X_train, y_train, epochs=10)
+
+	pred_train= model.predict(X_train)
+	scores = model.evaluate(X_train, y_train, verbose=0)
+
+	print("Quantidade de hidden layers: "+str(i))
+	print('MSE on training data: {}'.format(scores[1]))   
+	 
+	pred_test= model.predict(X_test)
+	scores2 = model.evaluate(X_test, y_test, verbose=0)
+	print('MSE on test data: {}'.format(scores2[1]))  
